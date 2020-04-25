@@ -64,11 +64,21 @@ class ContactData extends Component {
     }
 
     orderHandler = (event) => {
+        // This is to prevent reloding the of page!!!
         event.preventDefault();
+
         this.setState({ loading: true });
+
+        let orderData = {};
+        for(let key in this.state.orderForm){
+            orderData[key] = this.state.orderForm[key].value;
+        }
+
+
         const order = {
             ingredients: this.props.ingredients,
-            price: this.props.price
+            price: this.props.price,
+            orderData : orderData
         }
         axios.post('/orders.json', order)
             .then(response => {
@@ -106,9 +116,9 @@ class ContactData extends Component {
         }
 
         let form = (
-            <form>
+            <form onSubmit={this.orderHandler}>
                 {inputArray}
-                <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+                <Button btnType="Success">ORDER</Button>
             </form>
         );
         if (this.state.loading) {

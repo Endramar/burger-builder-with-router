@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { createStore , applyMiddleware} from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 
 import './index.css';
 import App from './App';
@@ -11,16 +11,18 @@ import reducer from './store/reducer';
 
 const logger = store => {
     return next => {
-        return action  => {
-            console.log("[Middleware] Dispatching ",action);
+        return action => {
+            console.log("[Middleware] Dispatching ", action);
             const result = next(action);
-            console.log("[Middleware next state] ",store.getState());
+            console.log("[Middleware next state] ", store.getState());
             return result;
         }
     }
 }
 
-const store = createStore(reducer, applyMiddleware(logger));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // this added for redux devtool to be able to recognize my redux store
+
+const store = createStore(reducer, composeEnhancers(applyMiddleware(logger)));
 
 const app = (
     <Provider store={store}>

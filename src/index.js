@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
+import thunk from 'redux-thunk';
 
 import './index.css';
 import App from './App';
@@ -22,7 +23,7 @@ const logger = store => {
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // this added for redux devtool to be able to recognize my redux store
 
-const store = createStore(burgerBuilderReducer, composeEnhancers(applyMiddleware(logger)));
+const store = createStore(burgerBuilderReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
 const app = (
     <Provider store={store}>

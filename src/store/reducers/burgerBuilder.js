@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import utility from '../utility';
 
 const initialState = {
     ingredients: null,
@@ -13,26 +14,23 @@ const INGREDIENT_PRICES = {
     bacon: 0.7
 };
 
+
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case actionTypes.ADD_INGREDIENT:
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-                },
+            const updatedIngredients = utility.updateObject(state.ingredients, { [action.ingredientName]: state.ingredients[action.ingredientName] + 1 });
+            const updatedState = {
+                ingredients: updatedIngredients,
                 totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
-            };
+            }
+            return utility.updateObject(state, updatedState);
         case actionTypes.REMOVE_INGREDIENT:
-            return {
-                ...state,
-                ingredients: {
-                    ...state.ingredients,
-                    [action.ingredientName]: state.ingredients[action.ingredientName] - 1
-                },
-                totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
-            };
+            const updatedIngredients2 = utility.updateObject(state.ingredients, { [action.ingredientName]: state.ingredients[action.ingredientName] - 1 });
+            const updatedState2 = {
+                ingredients: updatedIngredients2,
+                totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+            }
+            return utility.updateObject(state, updatedState2);
         case actionTypes.SET_INGREDIENTS:
             return {
                 ...state,
@@ -43,7 +41,7 @@ const reducer = (state = initialState, action) => {
                     meat: action.ingredients.meat
                 },
                 error: false,
-                totalPrice : 4
+                totalPrice: 4
             }
         case actionTypes.FETCH_INGREDIENTS_FAILED:
             return {

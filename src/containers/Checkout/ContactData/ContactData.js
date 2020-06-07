@@ -6,6 +6,8 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './ContactData.css';
 import axios from '../../../axios-orders';
 import Input from '../../../components/UI/Input/Input';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+import * as actions from '../../../store/actions/index';
 
 class ContactData extends Component {
     state = {
@@ -68,27 +70,18 @@ class ContactData extends Component {
         // This is to prevent reloding the of page!!!
         event.preventDefault();
 
-        this.setState({ loading: true });
-
         let orderData = {};
         for (let key in this.state.orderForm) {
             orderData[key] = this.state.orderForm[key].value;
         }
-
 
         const order = {
             ingredients: this.props.ings,
             price: this.props.price,
             orderData: orderData
         }
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({ loading: false });
-                this.props.history.push('/');
-            })
-            .catch(error => {
-                this.setState({ loading: false });
-            });
+
+        this.props.onOrderBurger(order);
     }
 
 
@@ -141,4 +134,10 @@ const mapPropsToState = state => {
     }
 }
 
-export default connect(mapPropsToState)(ContactData);
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderBurger: (orderData) => dispatch(actions.puchaseBurgerStart(orderData))
+    }
+}
+
+export default connect(mapPropsToState, mapDispatchToProps)(withErrorHandler(ContactData));

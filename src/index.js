@@ -10,6 +10,7 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
 import ordersReducer from './store/reducers/orders';
+import authReducer from './store/reducers/auth';
 
 const logger = store => {
     return next => {
@@ -23,8 +24,9 @@ const logger = store => {
 }
 
 const rootReducer = combineReducers({
-    burgerBuilder : burgerBuilderReducer,
-    order : ordersReducer
+    burgerBuilder: burgerBuilderReducer,
+    order: ordersReducer,
+    auth: authReducer
 });
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // this added for redux devtool to be able to recognize my redux store

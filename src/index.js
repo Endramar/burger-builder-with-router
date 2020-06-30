@@ -15,9 +15,7 @@ import authReducer from './store/reducers/auth';
 const logger = store => {
     return next => {
         return action => {
-            console.log("[Middleware] Dispatching ", action);
             const result = next(action);
-            console.log("[Middleware next state] ", store.getState());
             return result;
         }
     }
@@ -29,7 +27,7 @@ const rootReducer = combineReducers({
     auth: authReducer
 });
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // this added for redux devtool to be able to recognize my redux store
+const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose; // this added for redux devtool to be able to recognize my redux store
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
